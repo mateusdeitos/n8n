@@ -6,12 +6,14 @@ import { N8nAskAssistantChat } from '@n8n/design-system';
 import { useTelemetry } from '@/composables/useTelemetry';
 import { useBuilderStore } from '@/stores/builder.store';
 import { useI18n } from '@n8n/i18n';
+import { injectWorkflowState } from '@/composables/useWorkflowState';
 
 const emit = defineEmits<{
 	close: [];
 }>();
 
 const assistantStore = useAssistantStore();
+const workflowState = injectWorkflowState();
 const usersStore = useUsersStore();
 const telemetry = useTelemetry();
 const builderStore = useBuilderStore();
@@ -48,14 +50,14 @@ async function onUserMessage(content: string, quickReplyType?: string, isFeedbac
 }
 
 async function onCodeReplace(index: number) {
-	await assistantStore.applyCodeDiff(index);
+	await assistantStore.applyCodeDiff(workflowState, index);
 	telemetry.track('User clicked solution card action', {
 		action: 'replace_code',
 	});
 }
 
 async function undoCodeDiff(index: number) {
-	await assistantStore.undoCodeDiff(index);
+	await assistantStore.undoCodeDiff(workflowState, index);
 	telemetry.track('User clicked solution card action', {
 		action: 'undo_code_replace',
 	});
