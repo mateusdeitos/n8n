@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue';
-import { useI18n } from '@n8n/i18n';
 import { v4 as uuidv4 } from 'uuid';
 import hljs from 'highlight.js/lib/core';
 
@@ -14,7 +13,6 @@ import VueMarkdown from 'vue-markdown-render';
 import markdownLink from 'markdown-it-link-attributes';
 import type MarkdownIt from 'markdown-it';
 
-const i18n = useI18n();
 const chatStore = useChatStore();
 const userStore = useUsersStore();
 
