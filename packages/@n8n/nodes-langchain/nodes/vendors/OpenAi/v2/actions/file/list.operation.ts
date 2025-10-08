@@ -22,18 +22,28 @@ const properties: INodeProperties[] = [
 				type: 'options',
 				default: 'any',
 				description: 'Only return files with the given purpose',
+				// TODO: add descriptions?
+				// eslint-disable-next-line n8n-nodes-base/node-param-options-type-unsorted-items
 				options: [
 					{
 						name: 'Any [Default]',
 						value: 'any',
 					},
 					{
-						name: 'Assistants',
-						value: 'assistants',
-					},
-					{
 						name: 'Fine-Tune',
 						value: 'fine-tune',
+					},
+					{
+						name: 'Vision',
+						value: 'vision',
+					},
+					{
+						name: 'User Data',
+						value: 'user_data',
+					},
+					{
+						name: 'Evals',
+						value: 'evals',
 					},
 				],
 			},

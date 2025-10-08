@@ -1,9 +1,13 @@
-import type { ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
+import type { IDataObject, ILoadOptionsFunctions, INodePropertyOptions } from 'n8n-workflow';
 
 import { apiRequest } from '../../transport';
 
 export async function getFiles(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-	const { data } = await apiRequest.call(this, 'GET', '/files', { qs: { purpose: 'assistants' } });
+	// TODO: get purpose from options?
+	const options = this.getNodeParameter('options', {}) as IDataObject;
+	const { data } = await apiRequest.call(this, 'GET', '/files', {
+		qs: { purpose: options?.purpose || 'user_data' },
+	});
 
 	const returnData: INodePropertyOptions[] = [];
 

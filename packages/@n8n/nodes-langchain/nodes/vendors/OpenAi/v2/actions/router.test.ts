@@ -18,7 +18,7 @@ describe('OpenAI router', () => {
 			id: 'error-node-id',
 			name: 'ErrorNode',
 			type: 'test.error',
-			typeVersion: 1,
+			typeVersion: 2,
 			position: [100, 200],
 			parameters: {},
 		};

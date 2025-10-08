@@ -4,7 +4,6 @@ import type {
 	INodeListSearchItems,
 	INodeListSearchResult,
 } from 'n8n-workflow';
-import type { Assistant } from 'openai/resources/beta/assistants';
 import type { Model } from 'openai/resources/models';
 
 import { apiRequest } from '../../transport';
@@ -102,56 +101,4 @@ export async function imageModelSearch(
 	return await getModelSearch(
 		(model) => model.id.includes('vision') || model.id.includes('gpt-4o'),
 	)(this, filter);
-}
-
-export async function assistantSearch(
-	this: ILoadOptionsFunctions,
-	filter?: string,
-	paginationToken?: string,
-): Promise<INodeListSearchResult> {
-	const { data, has_more, last_id } = (await apiRequest.call(this, 'GET', '/assistants', {
-		headers: {
-			'OpenAI-Beta': 'assistants=v2',
-		},
-		qs: {
-			limit: 100,
-			after: paginationToken,
-		},
-	})) as {
-		data: Assistant[];
-		has_more: boolean;
-		last_id: string;
-		first_id: string;
-	};
-
-	if (has_more) {
-		paginationToken = last_id;
-	} else {
-		paginationToken = undefined;
-	}
-
-	if (filter) {
-		const results: INodeListSearchItems[] = [];
-
-		for (const assistant of data || []) {
-			if (assistant.name?.toLowerCase().includes(filter.toLowerCase())) {
-				results.push({
-					name: assistant.name,
-					value: assistant.id,
-				});
-			}
-		}
-
-		return {
-			results,
-		};
-	} else {
-		return {
-			results: (data || []).map((assistant) => ({
-				name: assistant.name ?? assistant.id,
-				value: assistant.id,
-			})),
-			paginationToken,
-		};
-	}
 }

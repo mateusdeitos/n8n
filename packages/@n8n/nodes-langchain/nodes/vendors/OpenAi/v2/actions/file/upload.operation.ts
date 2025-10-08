@@ -32,12 +32,20 @@ const properties: INodeProperties[] = [
 					"The intended purpose of the uploaded file, the 'Fine-tuning' only supports .jsonl files",
 				options: [
 					{
-						name: 'Assistants',
-						value: 'assistants',
-					},
-					{
 						name: 'Fine-Tune',
 						value: 'fine-tune',
+					},
+					{
+						name: 'Vision',
+						value: 'vision',
+					},
+					{
+						name: 'User Data',
+						value: 'user_data',
+					},
+					{
+						name: 'Evals',
+						value: 'evals',
 					},
 				],
 			},
@@ -60,7 +68,7 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	const formData = new FormData();
 
-	formData.append('purpose', options.purpose || 'assistants');
+	formData.append('purpose', options.purpose || 'user_data');
 
 	const { filename, contentType, fileContent } = await getBinaryDataFile(
 		this,

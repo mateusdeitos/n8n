@@ -1,29 +1,13 @@
 /* eslint-disable n8n-nodes-base/node-filename-against-convention */
-import type { INodeInputConfiguration, INodeTypeDescription } from 'n8n-workflow';
+import type { INodeTypeDescription } from 'n8n-workflow';
 import { NodeConnectionTypes } from 'n8n-workflow';
 
-import * as assistant from './assistant';
 import * as audio from './audio';
 import * as file from './file';
 import * as image from './image';
 import * as text from './text';
 
-const configureNodeInputs = (
-	resource: string,
-	operation: string,
-	hideTools: string,
-	memory: string | undefined,
-) => {
-	if (resource === 'assistant' && operation === 'message') {
-		const inputs: INodeInputConfiguration[] = [
-			{ type: 'main' },
-			{ type: 'ai_tool', displayName: 'Tools' },
-		];
-		if (memory !== 'threadId') {
-			inputs.push({ type: 'ai_memory', displayName: 'Memory', maxConnections: 1 });
-		}
-		return inputs;
-	}
+const configureNodeInputs = (resource: string, operation: string, hideTools: string) => {
 	if (resource === 'text' && operation === 'message') {
 		if (hideTools === 'hide') {
 			return ['main'];
@@ -38,12 +22,12 @@ export const versionDescription: INodeTypeDescription = {
 	displayName: 'OpenAI',
 	name: 'openAi',
 	group: ['transform'],
-	description: 'Message an assistant or GPT, analyze images, generate audio, etc.',
+	description: 'Message an GPT, analyze images, generate audio, etc.',
 	version: [2],
 	defaults: {
 		name: 'OpenAI',
 	},
-	inputs: `={{(${configureNodeInputs})($parameter.resource, $parameter.operation, $parameter.hideTools, $parameter.memory ?? undefined)}}`,
+	inputs: `={{(${configureNodeInputs})($parameter.resource, $parameter.operation, $parameter.hideTools)}}`,
 	outputs: [NodeConnectionTypes.Main],
 	credentials: [
 		{
@@ -59,10 +43,6 @@ export const versionDescription: INodeTypeDescription = {
 			noDataExpression: true,
 			// eslint-disable-next-line n8n-nodes-base/node-param-options-type-unsorted-items
 			options: [
-				{
-					name: 'Assistant',
-					value: 'assistant',
-				},
 				{
 					name: 'Text',
 					value: 'text',
@@ -82,7 +62,6 @@ export const versionDescription: INodeTypeDescription = {
 			],
 			default: 'text',
 		},
-		...assistant.description,
 		...audio.description,
 		...file.description,
 		...image.description,
