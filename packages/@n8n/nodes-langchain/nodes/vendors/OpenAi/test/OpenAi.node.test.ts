@@ -2,12 +2,12 @@ import FormData from 'form-data';
 import get from 'lodash/get';
 import type { IDataObject, IExecuteFunctions } from 'n8n-workflow';
 
-import * as assistant from '../actions/assistant';
-import * as audio from '../actions/audio';
-import * as file from '../actions/file';
-import * as image from '../actions/image';
-import * as text from '../actions/text';
 import * as transport from '../transport';
+import * as assistant from '../v2/actions/assistant';
+import * as audio from '../v2/actions/audio';
+import * as file from '../v2/actions/file';
+import * as image from '../v2/actions/image';
+import * as text from '../v2/actions/text';
 
 const createExecuteFunctionsMock = (parameters: IDataObject) => {
 	const nodeParameters = parameters;

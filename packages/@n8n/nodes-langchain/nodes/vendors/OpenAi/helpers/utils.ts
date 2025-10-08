@@ -49,3 +49,37 @@ export function formatToOpenAIAssistantTool(tool: Tool): OpenAIClient.Beta.Assis
 export async function getChatMessages(memory: BufferWindowMemory): Promise<BaseMessage[]> {
 	return (await memory.loadMemoryVariables({}))[memory.memoryKey] as BaseMessage[];
 }
+
+export function prettifyOperation(resource: string, operation: string) {
+	if (operation === 'deleteAssistant') {
+		return 'Delete Assistant';
+	}
+
+	if (operation === 'deleteFile') {
+		return 'Delete File';
+	}
+
+	if (operation === 'classify') {
+		return 'Classify Text';
+	}
+
+	if (operation === 'message' && resource === 'text') {
+		return 'Message Model';
+	}
+
+	const capitalize = (str: string) => {
+		const chars = str.split('');
+		chars[0] = chars[0].toUpperCase();
+		return chars.join('');
+	};
+
+	if (['transcribe', 'translate'].includes(operation)) {
+		resource = 'recording';
+	}
+
+	if (operation === 'list') {
+		resource = resource + 's';
+	}
+
+	return `${capitalize(operation)} ${capitalize(resource)}`;
+}
